@@ -18,23 +18,30 @@ class PersonParser {
 
   constructor(file) {
     this._file = file
-    this._people = null
+    this._people = []
   }
 
   get people(){
 
-    this._people = fs.readFileSync(this._file).toString().split('\n')
+    let peopleString = fs.readFileSync(this._file).toString().split('\n')
     
+    for(let i=0; i<peopleString.length; i++){
+      peopleString[i] = peopleString[i].split(',')
+    }
+
+    peopleString.forEach(people =>{
+      this._people.push(new Person(people[0], people[1], people[2], people[3], people[4], people[5]))
+    })
+
     let objPeople = {
-      size : this._people.length-2
+      size : this._people.length-1
     }
 
     return objPeople
   }
 
   addPerson(personObj) {
-    this._people.push(personObj.id+','+personObj.firstName+','+personObj.lastName+','+personObj.email+','+personObj.phoneNum+','+personObj.createDate)
-    return this
+    this._people.push(personObj)
   }
 
   save(){
@@ -43,24 +50,27 @@ class PersonParser {
 
     this._people.forEach((person, index) =>{
       if(index < this._people.length-1){
-        people +=person +'\n'  
+        people +=this.objToString(person)+'\n'  
       }else{
-        people +=person
+        people +=this.objToString(person)
       }
-      
     })
 
     fs.writeFileSync(this._file, people)
   }
+
+  objToString(obj){
+    return obj.id+','+obj.firstName+','+obj.lastName+','+obj.email+','+obj.phoneNum+','+obj.createDate
+  }
 }
 
 let parser = new PersonParser('people.csv')
+// //console.log(parser._people);
+// //parser.addPerson(new Person(parser._people.length-1, 'Ahmad', 'Nizar', 'ahmadnizar.owl@gmail.com', '081279155548', new Date()))
+// //console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
+// //console.log(parser._people[201]);
+// //parser.save()
 parser.people
-//console.log(parser._people);
-//parser.addPerson(new Person(parser._people.length-1, 'Ahmad', 'Nizar', 'ahmadnizar.owl@gmail.com', '081279155548', new Date()))
-//console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
-//console.log(parser._people[201]);
-//parser.save()
 parser.addPerson(new Person(parser._people.length-1, faker.name.firstName(), faker.name.lastName(), faker.internet.email(), faker.phone.phoneNumber(), faker.date.recent()))
 parser.save()
 console.log(`There are ${parser.people.size} people in the file '${parser._file}'.`)
