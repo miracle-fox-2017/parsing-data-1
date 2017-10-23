@@ -61,7 +61,7 @@ class PersonParser
     {
       savedString += this._people[i].convertToString() + "\n";
     }
-    let saver = fs.writeFileSync(this.file, savedString);
+    fs.writeFileSync(this.file, savedString);
   }
 
   getPersons()
