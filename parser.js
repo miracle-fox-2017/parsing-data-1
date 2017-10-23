@@ -10,7 +10,9 @@ class Person {
     this.phone=phone;
     this.created_at=date;
   }
-  // Look at the above CSV file
+  convertString(){
+    return `${this.id},${this.firstname},${this.lastname},${this.email},${this.phone},${this.created_at},'\n'`
+  }// Look at the above CSV file
   // What attributes should a Person object have?
 }
 
@@ -63,14 +65,22 @@ class PersonParser {
   }
 
   save(){
+    let start='id,first_name,last_name,email,phone,created_at \n'
+    for(let i=1;i<this._people.length;i++){
+      start+=this._people[i].convertString()
+    }
+    fs.writeFileSync(this._file,start)
+    // console.log(start);
+
 
     }
   }
-  convertDate(){
-    // for(let i=0;i<this.people.created_atlength)
-    // let date = new Date ()
+  // convertDate(){
+  //   // for(let i=0;i<this.people.created_atlength)
+  //   // let date = new Date ()
+  //
+  // }
 
-  }
 
 
 
@@ -79,6 +89,7 @@ let parser = new PersonParser('people.csv')
 parser.convertData();
 parser.addPerson(new Person('201','Mandra','Gade','Mandra@gade.com','121212','2018-07-15T12:06:16-08:00'))
 parser.people
-console.log(parser.people);
+// console.log(parser.people);
+parser.save();
 
 // console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
