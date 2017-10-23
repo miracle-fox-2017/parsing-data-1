@@ -8,7 +8,7 @@ class Person {
     this.last_name = last_name;
     this.email = email;
     this.phone = phone;
-    this.created_at = new Date(created_at);
+    this.created_at = new Date(created_at).toString();
   }
 }
 
@@ -134,7 +134,7 @@ class PersonParser {
 let parser = new PersonParser('people.csv')
 parser.getPeopleFromCsv();
 console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
-parser.addPerson(new Person(203,'Mark','Elric','edward@must.com','2-633-389-7173','2012-05-10T03:53:40-07:00'));
+parser.addPerson(new Person(201,'Mark','Elric','edward@must.com','2-633-389-7173','2012-05-10T03:53:40-07:00'));
 parser.save();
-parser.addPerson(new Person(204,'Van','Elric','alphon@must.com','2-633-389-7173','2012-05-10T03:53:40-07:00'));
+parser.addPerson(new Person(202,'Van','Elric','alphon@must.com','2-633-389-7173','2012-05-10T03:53:40-07:00'));
 parser.save();
