@@ -1,5 +1,14 @@
 "use strict"
 const fs = require('fs')
+const faker = require('faker')
+
+// faker
+let randomId = faker.random.number()
+let randomFirstName = faker.name.firstName()
+let randomLasttName = faker.name.lastName()
+let randomEmail = faker.internet.email()
+let randomPhone = faker.phone.phoneNumberFormat()
+
 
 class Person {
   // Look at the above CSV file
@@ -68,7 +77,11 @@ let parser = new PersonParser('people.csv')
 
 parser.getFile()
 // console.log(parser.getFile())
-parser.addPerson(new Person('201', 'aditya', 'reza', 'lete.note3@gmail.com', '085959777098', new Date()))
+parser.addPerson(new Person(`${randomId}`, 'aditya', 'reza', 'lete.note3@gmail.com', '085959777098', new Date()))
+parser.addPerson(new Person(`${randomId}`,`${randomFirstName}`,`${randomLasttName}`,`${randomEmail}`,`${randomPhone}`, new Date()))
+
 parser.save()
 console.log('>>>>>>', parser.people.data[200])
 console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
+
+console.log(`>>> test faker <<< ${randomId} - ${randomFirstName} - ${randomLasttName} - ${randomEmail} - ${randomPhone}`)
