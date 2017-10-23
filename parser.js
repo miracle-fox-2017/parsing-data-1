@@ -21,9 +21,15 @@ class PersonParser {
     this._people = null
   }
 
-  get people() {
+  get people(){
+
     this._people = fs.readFileSync(this._file).toString().split('\n')
-    return this._people
+    
+    let objPeople = {
+      size : this._people.length-2
+    }
+
+    return objPeople
   }
 
   addPerson(personObj) {
@@ -44,11 +50,7 @@ class PersonParser {
       
     })
 
-    fs.writeFile(this._file, people, (err)=>{
-      if(!err){
-        console.log('Data sudah ditambahkan');
-      }
-    })
+    fs.writeFileSync(this._file, people)
   }
 }
 
@@ -56,8 +58,9 @@ let parser = new PersonParser('people.csv')
 parser.people
 //console.log(parser._people);
 //parser.addPerson(new Person(parser._people.length-1, 'Ahmad', 'Nizar', 'ahmadnizar.owl@gmail.com', '081279155548', new Date()))
-//console.log(`There are ${parser._people.length} people in the file '${parser._file}'.`)
+//console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
 //console.log(parser._people[201]);
 //parser.save()
 parser.addPerson(new Person(parser._people.length-1, faker.name.firstName(), faker.name.lastName(), faker.internet.email(), faker.phone.phoneNumber(), faker.date.recent()))
 parser.save()
+console.log(`There are ${parser.people.size} people in the file '${parser._file}'.`)
