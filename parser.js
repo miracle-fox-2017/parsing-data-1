@@ -11,7 +11,7 @@ class Person {
       this.last_name = lastname
       this.email = email
       this.phone = phone
-      this.created_at = createdAt
+      this.created_at = new Date(createdAt)
   }
 
 }
@@ -44,6 +44,7 @@ class PersonParser {
        ))
      })
 
+     console.log(csv);
   }
 
   get people() {
@@ -59,7 +60,7 @@ class PersonParser {
   }
 
   addPerson(obj) {
-    let value = `\n${obj.id},${obj.first_name},${obj.last_name},${obj.email},${obj.phone},${obj.created_at}`
+    let value = `\n${obj.id},${obj.first_name},${obj.last_name},${obj.email},${obj.phone},${obj.created_at.toISOString()}`
     this.new_person = value
 
   }
@@ -76,9 +77,8 @@ let parser = new PersonParser('people.csv')
 
 // console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
 parser.parse();
-// parser.addPerson(new Person('201','tes','tes','tes@gmail.com','12345', Date()))
+parser.addPerson(new Person('201','tes','tes','tes@gmail.com','12345', Date()))
 // // console.log(parser.people);
-// parser.save()
-
+parser.save()
 // console.log(parser.people);
 console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
