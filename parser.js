@@ -1,7 +1,7 @@
 "use strict"
 const fs = require('fs');
 var faker = require('faker');
-let f_id = faker.random.uuid();
+let f_id = faker.random.number();
 let f_firstname = faker.name.firstName();
 let f_lastname = faker.name.lastName();
 let f_email = faker.internet.email();
