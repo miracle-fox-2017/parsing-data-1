@@ -1,5 +1,12 @@
 "use strict"
 const fs = require('fs');
+var faker = require('faker');
+let f_id = faker.random.uuid();
+let f_firstname = faker.name.firstName();
+let f_lastname = faker.name.lastName();
+let f_email = faker.internet.email();
+let f_phone = faker.phone.phoneNumber();
+
 class Person {
   constructor(id,first_name,last_name,email,phone,created_at){
     this.id = id
@@ -34,7 +41,14 @@ class PersonParser {
     })
   }
   get people() {
-    return this._people
+    let object = {
+      dataPeople : this._people,
+      size       : this._people.length
+    }
+    return object
+  }
+  get file() {
+    return this._file
   }
 
   addPerson(input) {
@@ -66,7 +80,8 @@ class PersonParser {
 let parser = new PersonParser('people.csv')
 parser.parsingData(()=>{
   parser.addPerson(new Person(201,'Agustinus','Saja','vbagustinus@gmail.com',085700009776,new Date()))
+  parser.addPerson(new Person(f_id,f_firstname,f_lastname,f_email,f_phone,new Date()))
   // console.log(parser.people[199]);
-  console.log(`There are ${parser.people.length+1} people in the file '${parser._file}'.`)
+  console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
   parser.save()
 })
