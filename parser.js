@@ -22,13 +22,14 @@ class PersonParser {
   }
 
   get people() {
-    this._people = fs.readFileSync(this._file).toString().split('\n');
+    let dat = fs.readFileSync(this._file).toString().split('\n');
     let obj = {
-      data: this._people,
-      size: this._people.length-1,
+      data: dat,
+      size: dat.length-1,
       file: this._file,
     }
-    return obj;
+    this._people = obj;
+    return this._people;
   }
 
   get file(){
@@ -39,15 +40,15 @@ class PersonParser {
   addPerson(obj) {
     let id = this.people.size+1;
     let sekarang = new Date(Date.now()).toISOString();
-    
+
     //2012-05-13T21:05:15-07:00
     let add = id+','+obj.first_name+','+obj.last_name+','+obj.email+','+obj.phone+','+sekarang;
-    this._people.push(add);
+    this._people.data.push(add);
     return add+' added';
   }
 
   save(){
-    fs.writeFileSync(this._file, this._people.join('\n'));
+    fs.writeFileSync(this._file, this._people.data.join('\n'));
     console.log('Saved!');
   }
 
