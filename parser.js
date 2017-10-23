@@ -8,7 +8,7 @@ class Person {
     this.last_name = last_name;
     this.email = email;
     this.phone = phone;
-    this.created_at = created_at;
+    this.created_at = new Date(created_at).toISOString();
   }
 }
 
@@ -67,14 +67,14 @@ class PersonParser {
       arrPeople.push(new Person(item[0], item[1], item[2], item[3], item[4], item[5]))
     }
 
-    this.setPeople(arrPeople);
-    return arrPeople;
+    this.people = arrPeople;
+    // return arrPeople;
   }
 
   get people() {
     let objPeople = {
-      data : this.getPeopleFromCsv(),
-      size : this.getPeopleFromCsv().length,
+      data: this._people,
+      size: this._people.length,
     }
 
     return objPeople
@@ -84,43 +84,56 @@ class PersonParser {
     return this._file;
   }
 
-  setPeople(person) {
+  set people(person) {
     this._people = person;
   }
 
   addPerson(person) {
     let allPeople = this.people.data;
     allPeople.push(person);
-    this.setPeople(allPeople);
+    this.people = allPeople;
   }
 
-  getAllPeopleData() {
-    return this._people;
-  }
+  // getAllPeopleData() {
+  //   return this._people;
+  // }
 
   save() {
-    let newPerson = this.getAllPeopleData()[this.getAllPeopleData().length - 1];
-    let objNewPerson = JSON.parse(JSON.stringify(newPerson));
-    let strNewPerson = `${objNewPerson.id},${objNewPerson.first_name},${objNewPerson.last_name},${objNewPerson.email},${objNewPerson.phone},${objNewPerson.created_at}`;
+    let people = JSON.parse(JSON.stringify(this.people.data));
+    let strInput = ''; 
 
-    fs.appendFile(this.file, "\n"+strNewPerson, 'utf8', function (err) {
-    if (err) {
-      console.log('Some error occured - file either not saved or corrupted file saved.');
-    } else{
-      console.log('It\'s saved!');
+    for (var i = 0; i < people.length; i++) {
+      let dateStr = new Date(people[i].created_at);
+
+      strInput += people[i].id+',';
+      strInput += people[i].first_name+',';
+      strInput += people[i].last_name+',';
+      strInput += people[i].email+',';
+      strInput += people[i].phone+',';
+      strInput += people[i].phone+',';
+      strInput += dateStr.toISOString()+'\n';
     }
-    });
+
+   
+    fs.writeFileSync(this.file, strInput, 'utf-8');
+
+    // let objNewPerson = JSON.parse(JSON.stringify(newPerson));
+    // let strNewPerson = `${objNewPerson.id},${objNewPerson.first_name},${objNewPerson.last_name},${objNewPerson.email},${objNewPerson.phone},${new Date(objNewPerson.created_at).toISOString()}`;
+
+    // fs.appendFile(this.file, "\n"+strNewPerson, 'utf8', function (err) {
+    // if (err) {
+    //   console.log('Some error occured - file either not saved or corrupted file saved.');
+    // } else{
+    //   console.log('It\'s saved!');
+    // }
+    // });
   }
 }
 
 let parser = new PersonParser('people.csv')
-// console.log(parser.people.data);
+parser.getPeopleFromCsv();
 console.log(`There are ${parser.people.size} people in the file '${parser.file}'.`)
-parser.addPerson(new Person(201,'Edward','Elric','edward@must.com','2-633-389-7173','2012-05-10T03:53:40-07:00'));
+parser.addPerson(new Person(201,'Mark','Elric','edward@must.com','2-633-389-7173','2012-05-10T03:53:40-07:00'));
 parser.save();
-parser.addPerson(new Person(202,'Alphonse','Elric','alphon@must.com','2-633-389-7173','2012-05-10T03:53:40-07:00'));
+parser.addPerson(new Person(202,'Van','Elric','alphon@must.com','2-633-389-7173','2012-05-10T03:53:40-07:00'));
 parser.save();
-
-
-
-
