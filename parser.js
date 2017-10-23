@@ -49,12 +49,19 @@ class PersonParser {
   }
 
   addPerson(first_name, last_name, email, phone) {
-    this._people.push(new Person(this._people.length-1, first_name, last_name, email, phone, new Date()))
-    this.inputToFile = `${this._people.length-1},${first_name},${last_name},${email},${phone},${new Date()}\n`
+    this._people.push(new Person(this._people.length+1, first_name, last_name, email, phone, new Date()))
+    // this.inputToFile = `${this._people.length-1},${first_name},${last_name},${email},${phone},${new Date()}\n`
   }
 
   save() {
-    fs.appendFileSync(this._file, this.inputToFile, 'utf8')
+    // fs.appendFileSync(this._file, this.inputToFile, 'utf8')
+    let convert = [Object.keys(this._people[0])]
+    for(let i = 0; i < this._people.length; i++) {
+      convert.push(Object.values(this._people[i]))
+    }
+    convert = convert.join('\n');
+    console.log(convert);
+    fs.writeFileSync(this._file, convert, 'utf8')
   }
 
 }
